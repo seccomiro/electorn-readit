@@ -1,7 +1,13 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const windowStateKeeper = require('electron-window-state');
 
 let mainWindow;
+
+ipcMain.on('new-item', (e, itemUrl) => {
+  setTimeout(() => {
+    e.sender.send('new-item-success', 'New item from main process');
+  }, 2000);
+});
 
 function createWindow() {
   let state = windowStateKeeper({
