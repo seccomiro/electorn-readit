@@ -1,4 +1,5 @@
-const { ipcRenderer } = require('electron');
+const { ipcRenderer, TouchBarOtherItemsProxy } = require('electron');
+const items = require('./items')
 
 let showModal = document.querySelector('#show-modal');
 let closeModal = document.querySelector('#close-modal');
@@ -37,7 +38,7 @@ addItem.addEventListener('click', e => {
 });
 
 ipcRenderer.on('new-item-success', (e, newItem) => {
-  console.log(newItem);
+  items.addItem(newItem);
 
   toggleModalButtons();
 
