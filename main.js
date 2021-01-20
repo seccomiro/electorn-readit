@@ -31,6 +31,11 @@ function createWindow() {
 
   mainWindow.loadFile('renderer/main.html');
 
+  mainWindow.webContents.openDevTools({
+    mode: 'detach',
+    activate: false
+  });
+
   state.manage(mainWindow);
 
   mainWindow.on('closed', () => {
