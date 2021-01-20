@@ -38,7 +38,7 @@ addItem.addEventListener('click', e => {
 });
 
 ipcRenderer.on('new-item-success', (e, newItem) => {
-  items.addItem(newItem);
+  items.addItem(newItem, true);
 
   toggleModalButtons();
 
