@@ -9,31 +9,62 @@ fs.readFile(`${__dirname}/reader.js`, (err, data) => {
 
 exports.storage = JSON.parse(localStorage.getItem('readit-items')) || [];
 
+window.addEventListener('message', e => {
+  if (e.data.action === 'delete-reader-item') {
+    this.delete(e.data.itemIndex);
+    e.source.close();
+  }
+});
+
+exports.delete = itemIndex => {
+  items.removeChild(items.childNodes[itemIndex]);
+  this.storage.splice(itemIndex, 1);
+  this.save();
+
+  if (this.storage.length) {
+    let newSelectedIndex = itemIndex === 0 ? 0 : itemIndex - 1;
+
+    document
+      .querySelectorAll('.read-item')
+      [newSelectedIndex].classList.add('selected');
+  }
+};
+
+exports.getSelectedItem = () => {
+  let currentItem = document.querySelector('.read-item.selected');
+  let itemIndex = 0;
+  let child = currentItem;
+
+  while ((child = child.previousElementSibling) != null) itemIndex++;
+
+  return { node: currentItem, index: itemIndex };
+};
+
 exports.save = () => {
   localStorage.setItem('readit-items', JSON.stringify(this.storage));
 };
 
 exports.select = e => {
-  document.querySelector('.read-item.selected').classList.remove('selected');
+  this.getSelectedItem().node.classList.remove('selected');
   e.currentTarget.classList.add('selected');
 };
 
 exports.changeSelection = direction => {
-  let currentItem = document.querySelector('.read-item.selected');
-  if (direction === 'ArrowUp' && currentItem.previousElementSibling) {
-    currentItem.classList.remove('selected');
-    currentItem.previousElementSibling.classList.add('selected');
-  } else if (direction === 'ArrowDown' && currentItem.nextElementSibling) {
-    currentItem.classList.remove('selected');
-    currentItem.nextElementSibling.classList.add('selected');
+  let currentItemNode = this.getSelectedItem().node;
+  if (direction === 'ArrowUp' && currentItemNode.previousElementSibling) {
+    currentItemNode.classList.remove('selected');
+    currentItemNode.previousElementSibling.classList.add('selected');
+  } else if (direction === 'ArrowDown' && currentItemNode.nextElementSibling) {
+    currentItemNode.classList.remove('selected');
+    currentItemNode.nextElementSibling.classList.add('selected');
   }
 };
 
 exports.open = () => {
   if (!this.storage.length) return;
 
-  let selectedItem = document.querySelector('.read-item.selected');
-  let contentUrl = selectedItem.dataset.url;
+  let selectedItem = this.getSelectedItem();
+  let contentUrl = selectedItem.node.dataset.url;
 
   let readerWin = window.open(
     contentUrl,
@@ -48,7 +79,7 @@ exports.open = () => {
   contextIsolation=1`
   );
 
-  readerWin.eval(readerJS);
+  readerWin.eval(readerJS.replace('`{{index}}`', selectedItem.index));
 };
 
 exports.addItem = (item, isNew = false) => {
