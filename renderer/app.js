@@ -1,11 +1,25 @@
 const { ipcRenderer, TouchBarOtherItemsProxy } = require('electron');
-const items = require('./items')
+const items = require('./items');
 
 let showModal = document.querySelector('#show-modal');
 let closeModal = document.querySelector('#close-modal');
 let modal = document.querySelector('#modal');
 let addItem = document.querySelector('#add-item');
 let itemUrl = document.querySelector('#url');
+let search = document.querySelector('#search');
+
+search.addEventListener('keyup', e => {
+  Array.from(document.querySelectorAll('.read-item')).forEach(item => {
+    let hasMatch = item.innerText.toLowerCase().includes(search.value);
+    item.style.display = hasMatch ? 'flex' : 'none';
+  });
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+    items.changeSelection(e.key);
+  }
+});
 
 const toggleModalButtons = () => {
   if (addItem.disabled === true) {
