@@ -1,3 +1,4 @@
+const { shell } = require('electron');
 const fs = require('fs');
 
 let items = document.querySelector('#items');
@@ -34,6 +35,10 @@ exports.getSelectedItem = () => {
   let currentItem = document.querySelector('.read-item.selected');
   let itemIndex = 0;
   let child = currentItem;
+
+  if (!currentItem) {
+    return { node: null, index: -1 };
+  }
 
   while ((child = child.previousElementSibling) != null) itemIndex++;
 
@@ -80,6 +85,15 @@ exports.open = () => {
   );
 
   readerWin.eval(readerJS.replace('`{{index}}`', selectedItem.index));
+};
+
+exports.openNative = () => {
+  if (!this.storage.length) return;
+
+  let selectedItem = this.getSelectedItem();
+  let contentUrl = selectedItem.node.dataset.url;
+
+  shell.openExternal(selectedItem.node.dataset.url);
 };
 
 exports.addItem = (item, isNew = false) => {

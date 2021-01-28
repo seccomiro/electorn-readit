@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const windowStateKeeper = require('electron-window-state');
 const readItem = require('./readItem');
+const appMenu = require('./menu');
 
 let mainWindow;
 
@@ -29,11 +30,14 @@ function createWindow() {
     },
   });
 
+  appMenu(mainWindow.webContents);
+  // mainWindow.setMenu([{label: 'Test', submenu: []}])
+
   mainWindow.loadFile('renderer/main.html');
 
   mainWindow.webContents.openDevTools({
     mode: 'detach',
-    activate: false
+    activate: false,
   });
 
   state.manage(mainWindow);

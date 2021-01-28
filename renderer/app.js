@@ -1,4 +1,4 @@
-const { ipcRenderer, TouchBarOtherItemsProxy } = require('electron');
+const { ipcRenderer } = require('electron');
 const items = require('./items');
 
 let showModal = document.querySelector('#show-modal');
@@ -7,6 +7,29 @@ let modal = document.querySelector('#modal');
 let addItem = document.querySelector('#add-item');
 let itemUrl = document.querySelector('#url');
 let search = document.querySelector('#search');
+
+ipcRenderer.on('menu-show-modal', () => {
+  showModal.click();
+});
+
+ipcRenderer.on('menu-open-item', () => {
+  items.open();
+});
+
+ipcRenderer.on('menu-delete-item', () => {
+  const selectedItem = items.getSelectedItem();
+  if (selectedItem.node) {
+    items.delete(selectedItem.index);
+  }
+});
+
+ipcRenderer.on('menu-open-item-native', () => {
+  items.openNative();
+});
+
+ipcRenderer.on('menu-focus-search', () => {
+  search.focus();
+});
 
 search.addEventListener('keyup', e => {
   Array.from(document.querySelectorAll('.read-item')).forEach(item => {
