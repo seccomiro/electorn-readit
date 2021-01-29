@@ -1,4 +1,5 @@
 const { ipcRenderer } = require('electron');
+const menu = require('./menu');
 const items = require('./items');
 
 let showModal = document.querySelector('#show-modal');
@@ -32,10 +33,14 @@ ipcRenderer.on('menu-focus-search', () => {
 });
 
 search.addEventListener('keyup', e => {
-  Array.from(document.querySelectorAll('.read-item')).forEach(item => {
+  const elements = Array.from(document.querySelectorAll('.read-item'));
+  elements.forEach(item => {
     let hasMatch = item.innerText.toLowerCase().includes(search.value);
     item.style.display = hasMatch ? 'flex' : 'none';
   });
+  if (elements.length > 0) {
+    items.select(elements[0]);
+  }
 });
 
 document.addEventListener('keydown', e => {
@@ -61,10 +66,16 @@ const toggleModalButtons = () => {
 showModal.addEventListener('click', e => {
   modal.style.display = 'flex';
   itemUrl.focus();
+  menu.setStatus({
+    disable: ['add-new', 'read-item', 'delete-item', 'open-native', 'search'],
+  });
 });
 
 closeModal.addEventListener('click', e => {
   modal.style.display = 'none';
+  menu.setStatus({
+    enable: ['add-new', 'read-item', 'delete-item', 'open-native', 'search'],
+  });
 });
 
 addItem.addEventListener('click', e => {
@@ -81,6 +92,10 @@ ipcRenderer.on('new-item-success', (e, newItem) => {
 
   modal.style.display = 'none';
   itemUrl.value = '';
+
+  menu.setStatus({
+    enable: ['add-new', 'read-item', 'delete-item', 'open-native', 'search'],
+  });
 });
 
 itemUrl.addEventListener('keyup', e => {

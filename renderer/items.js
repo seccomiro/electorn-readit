@@ -90,10 +90,10 @@ exports.open = () => {
 exports.openNative = () => {
   if (!this.storage.length) return;
 
-  let selectedItem = this.getSelectedItem();
-  let contentUrl = selectedItem.node.dataset.url;
+  const selectedItem = this.getSelectedItem();
+  const contentUrl = selectedItem.node.dataset.url;
 
-  shell.openExternal(selectedItem.node.dataset.url);
+  shell.openExternal(contentUrl);
 };
 
 exports.addItem = (item, isNew = false) => {

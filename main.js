@@ -30,7 +30,7 @@ function createWindow() {
     },
   });
 
-  appMenu(mainWindow.webContents);
+  appMenu(mainWindow);
   // mainWindow.setMenu([{label: 'Test', submenu: []}])
 
   mainWindow.loadFile('renderer/main.html');
