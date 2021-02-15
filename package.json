@@ -1,20 +1,54 @@
 {
   "name": "readit",
-  "version": "1.0.0",
-  "description": "",
+  "productName": "Readit",
+  "version": "1.0.2",
+  "description": "An awesome app.",
   "main": "main.js",
+  "copyright": "Copyright © year ${author}",
   "scripts": {
     "start": "electron .",
-    "watch": "nodemon --exec electron ."
+    "watch": "nodemon --exec electron .",
+    "build": "electron-builder -lm",
+    "release": "electron-builder -l -p 'onTagOrDraft'"
   },
+  "repository": "https://github.com/seccomiro/electron-readit",
   "keywords": [],
-  "author": "",
+  "author": {
+    "name": "Diego Stiehl",
+    "email": "seccomiro@users.noreply.github.com"
+  },
   "license": "ISC",
   "devDependencies": {
     "electron": "^11.2.1",
+    "electron-builder": "^22.9.1",
     "nodemon": "^2.0.7"
   },
   "dependencies": {
+    "electron-log": "^4.3.1",
+    "electron-updater": "^4.3.5",
     "electron-window-state": "^5.0.3"
+  },
+  "build": {
+    "appId": "com.stiehl.readit",
+    "directories": {
+      "buildResources": "."
+    },
+    "linux": {
+      "publish": "github",
+      "target": "deb",
+      "category": "Utility"
+    },
+    "mac": {
+      "publish": [
+        "github"
+      ],
+      "category": "public.app-category.productivity"
+    },
+    "win": {
+      "publish": [
+        "github"
+      ]
+    },
+    "compression": "store"
   }
 }

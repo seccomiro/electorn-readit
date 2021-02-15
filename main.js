@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const windowStateKeeper = require('electron-window-state');
 const readItem = require('./readItem');
 const appMenu = require('./menu');
+const updater = require('./updater');
 
 let mainWindow;
 
@@ -12,6 +13,8 @@ ipcMain.on('new-item', (e, itemUrl) => {
 });
 
 function createWindow() {
+  setTimeout(updater, 1000);
+
   let state = windowStateKeeper({
     defaultWidth: 500,
     defaultHeight: 650,
@@ -35,10 +38,10 @@ function createWindow() {
 
   mainWindow.loadFile('renderer/main.html');
 
-  mainWindow.webContents.openDevTools({
-    mode: 'detach',
-    activate: false,
-  });
+  // mainWindow.webContents.openDevTools({
+  //   mode: 'detach',
+  //   activate: false,
+  // });
 
   state.manage(mainWindow);
 
