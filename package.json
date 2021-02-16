@@ -1,15 +1,16 @@
 {
   "name": "readit",
   "productName": "Readit",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "An awesome app.",
   "main": "main.js",
   "copyright": "Copyright © year ${author}",
   "scripts": {
     "start": "electron .",
     "watch": "nodemon --exec electron .",
-    "build": "electron-builder -lm",
-    "release": "electron-builder -l -p 'onTagOrDraft'"
+    "build": "electron-builder build",
+    "build:win": "electron-builder -w",
+    "release": "electron-builder -w -p 'onTagOrDraft'"
   },
   "repository": "https://github.com/seccomiro/electron-readit",
   "keywords": [],

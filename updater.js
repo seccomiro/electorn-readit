@@ -27,11 +27,11 @@ module.exports = () => {
     const installResult = await dialog.showMessageBox({
       type: 'info',
       title: 'Update ready',
-      message: 'Install & restart now?',
+      message: 'Your update is ready to be installed. Install & restart now?',
       buttons: ['Yes', 'Later'],
     });
 
-    if (updateResult.response === 0) {
+    if (installResult.response === 0) {
       autoUpdater.quitAndInstall(false, true);
     }
   });
